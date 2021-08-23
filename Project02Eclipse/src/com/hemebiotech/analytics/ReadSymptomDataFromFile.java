@@ -5,11 +5,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
-/**
- * Simple brute force implementation
- *
- */
 public class ReadSymptomDataFromFile implements ISymptomReader {
 
 	private String filepath;
@@ -23,25 +20,16 @@ public class ReadSymptomDataFromFile implements ISymptomReader {
 	}
 	
 	@Override
-	public List<String> GetSymptoms() {
-		ArrayList<String> result = new ArrayList<String>();
-		
-		if (filepath != null) {
-			try {
-				BufferedReader reader = new BufferedReader (new FileReader(filepath));
-				String line = reader.readLine();
-				
-				while (line != null) {
-					result.add(line);
-					line = reader.readLine();
-				}
-				reader.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		return result;
-	}
+	public List<String> getSymptoms() throws IOException {
+		try (BufferedReader reader = new BufferedReader (new FileReader(filepath))) {
 
+			Scanner scanner = new Scanner(reader);
+			List<String> symptoms = new ArrayList<>();
+
+			while (scanner.hasNext())
+				symptoms.add(scanner.nextLine());
+
+			return symptoms;
+		}
+	}
 }
